@@ -183,7 +183,7 @@ class UpgradeAddonsOperation(object):
             exclude_addons = set()
         install_command = self.options.install_command
         install_args = self.options.install_args[:] or []
-        install_args += [u'--workers=0', u'--stop-after-init']
+        install_args += [u'--workers=0', u'--stop-after-init', u'--no-xmlrpc']
 
         to_install = self.to_install - exclude_addons
         if to_install:
@@ -204,11 +204,12 @@ class Operation(object):
     def __init__(self, command):
         if isinstance(command, string_types):
             command = self._shlex_split_unicode(command)
+            import pdb;pdb.set_trace()
         self.command = command
 
     @staticmethod
     def _shlex_split_unicode(command):
-        return [l.decode('utf8') for l in shlex.split(command.encode('utf8'))]
+        return [l for l in shlex.split(command)]
 
     def __nonzero__(self):
         return bool(self.command)
